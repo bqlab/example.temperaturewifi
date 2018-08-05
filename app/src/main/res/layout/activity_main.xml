@@ -10,6 +10,7 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/living_room"
         android:layout_width="100dp"
         android:layout_height="200dp"
         android:layout_marginEnd="10dp"
@@ -19,6 +20,7 @@
         android:textStyle="bold" />
 
     <Button
+        android:id="@+id/inner_room"
         android:layout_width="100dp"
         android:layout_height="200dp"
         android:layout_marginEnd="10dp"
