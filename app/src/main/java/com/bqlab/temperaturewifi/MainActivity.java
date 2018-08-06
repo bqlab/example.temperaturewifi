@@ -1,6 +1,8 @@
 package com.bqlab.temperaturewifi;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -89,7 +91,14 @@ public class MainActivity extends AppCompatActivity {
                 view.setBackground(getResources().getDrawable(R.color.colorYellow));
             else if (temp <= 105) {
                 view.setBackground(getResources().getDrawable(R.color.colorRed));
-                //119신고
+                AlertDialog.Builder b = new AlertDialog.Builder(MainActivity.this);
+                b.setMessage("화재가 발생했습니다. 119에 전화를 겁니다.");
+                b.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        MainActivity.this.startActivity(new Intent("android.intent.action.CALL", Uri.parse("119")));
+                    }
+                });
             }
         }
 
