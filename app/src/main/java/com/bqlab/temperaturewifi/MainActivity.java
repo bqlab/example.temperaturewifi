@@ -15,6 +15,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class Room {
-        private int temp;
         private Button view;
         private String ip;
         private Socket socket;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if (checkSetIP(e.getText().toString())) {
                         Toast.makeText(MainActivity.this, e.getText().toString() + "에 연결합니다.", Toast.LENGTH_SHORT).show();
+                        new Thread(new ThreadConnector(e.getText().toString(), 8090)).start();
                         Room.this.ip = e.getText().toString();
                         dialogInterface.dismiss();
                     } else {
@@ -115,10 +117,13 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try {
                     socket = new Socket(ip, port);
-                    ip = socket.getRemoteSocketAddress().toString();
+                    ThreadConnector.this.ip = socket.getRemoteSocketAddress().toString();
+                } catch (UnknownHostException e) {
+                    Toast.makeText(MainActivity.this, "호스트를 찾을 수 없습니다.", Toast.LENGTH_LONG).show();
+                } catch (SocketTimeoutException e) {
+                    Toast.makeText(MainActivity.this, "연결 시간이 초과되었습니다.", Toast.LENGTH_LONG).show();
                 } catch (Exception e) {
-                    Toast.makeText(MainActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
-                    finishAffinity();
+                    Toast.makeText(MainActivity.this, "알 수 없는 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
                 }
                 if (socket != null) {
                     try {
@@ -137,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
                             thread = new Thread(new ThreadReceiver());
                             thread.start();
                         } else
-                            Toast.makeText(MainActivity.this, "연결이 끊어졌습니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "서버와 연결할 수 없습니다.", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -150,8 +155,17 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     while (isConnected) {
                         if (reader == null) break;
-                        final int temp = Integer.parseInt(reader.readLine());
-
+                        final String temp = reader.readLine();
+                        if(temp != null) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Room.this.setColor(Integer.parseInt(temp));
+                                }
+                            });
+                        }
+                        reader = null;
+                        socket.close();
                     }
                 } catch (IOException e) {
                     Toast.makeText(MainActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
