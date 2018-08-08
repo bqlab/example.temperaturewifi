@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 b.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        MainActivity.this.startActivity(new Intent("android.intent.action.CALL", Uri.parse("119")));
+                        MainActivity.this.startActivity(new Intent("android.intent.action.DIAL", Uri.parse("tel:119")));
                     }
                 });
             }
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                     socket = new Socket(ip, port);
                     ThreadConnector.this.ip = socket.getRemoteSocketAddress().toString();
                 } catch (UnknownHostException e) {
-                    Log.d(TAG,  "ConnectThread: can't find host");
+                    Log.d(TAG, "ConnectThread: can't find host");
                 } catch (SocketTimeoutException e) {
                     Log.d(TAG, "ConnectThread: timeout");
                 } catch (Exception e) {
@@ -145,7 +145,8 @@ public class MainActivity extends AppCompatActivity {
                         if (isConnected) {
                             thread = new Thread(new ThreadReceiver());
                             thread.start();
-                        } else Toast.makeText(MainActivity.this, "서버와 연결할 수 없습니다.", Toast.LENGTH_SHORT).show();
+                        } else
+                            Toast.makeText(MainActivity.this, "서버와 연결할 수 없습니다.", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -159,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
                     while (isConnected) {
                         if (reader == null) break;
                         final String temp = reader.readLine();
-                        if(temp != null) {
+                        if (temp != null) {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
