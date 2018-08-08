@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     Room livingRoom;
     Room innerRoom;
 
+    private String TAG = "tcp";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +42,9 @@ public class MainActivity extends AppCompatActivity {
         private String ip;
         private Socket socket;
         private Thread thread;
-        private Boolean isConnected;
         private BufferedReader reader;
+
+        boolean isConnected = false;
 
         Room(Button view) {
             this.view = view;
@@ -119,11 +123,11 @@ public class MainActivity extends AppCompatActivity {
                     socket = new Socket(ip, port);
                     ThreadConnector.this.ip = socket.getRemoteSocketAddress().toString();
                 } catch (UnknownHostException e) {
-                    Toast.makeText(MainActivity.this, "호스트를 찾을 수 없습니다.", Toast.LENGTH_LONG).show();
+                    Log.d(TAG,  "ConnectThread: can't find host");
                 } catch (SocketTimeoutException e) {
-                    Toast.makeText(MainActivity.this, "연결 시간이 초과되었습니다.", Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "ConnectThread: timeout");
                 } catch (Exception e) {
-                    Toast.makeText(MainActivity.this, "알 수 없는 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
+                    Log.e(TAG, ("ConnectThread:" + e.getMessage()));
                 }
                 if (socket != null) {
                     try {
@@ -141,8 +145,7 @@ public class MainActivity extends AppCompatActivity {
                         if (isConnected) {
                             thread = new Thread(new ThreadReceiver());
                             thread.start();
-                        } else
-                            Toast.makeText(MainActivity.this, "서버와 연결할 수 없습니다.", Toast.LENGTH_SHORT).show();
+                        } else Toast.makeText(MainActivity.this, "서버와 연결할 수 없습니다.", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
