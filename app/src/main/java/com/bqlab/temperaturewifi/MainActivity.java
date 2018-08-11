@@ -24,8 +24,6 @@ public class MainActivity extends AppCompatActivity {
     Room livingRoom;
     Room innerRoom;
 
-    private String TAG = "tcp";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void run() {
+                String TAG = "tcp";
+
                 try {
                     socket = new Socket(ip, port);
                     ThreadConnector.this.ip = socket.getRemoteSocketAddress().toString();
