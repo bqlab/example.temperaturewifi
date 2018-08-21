@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">app</string>
-    <string name="living_room">거실</string>
-    <string name="inner_room">안방</string>
+    <string name="no_name">no_name</string>
 </resources>

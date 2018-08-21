@@ -10,22 +10,22 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/living_room"
+        android:id="@+id/room1"
         android:layout_width="100dp"
         android:layout_height="200dp"
         android:layout_marginEnd="10dp"
         android:background="@color/colorGray"
-        android:text="@string/living_room"
+        android:text="@string/no_name"
         android:textColor="@color/colorWhite"
         android:textStyle="bold" />
 
     <Button
-        android:id="@+id/inner_room"
+        android:id="@+id/room2"
         android:layout_width="100dp"
         android:layout_height="200dp"
         android:layout_marginEnd="10dp"
         android:background="@color/colorGray"
-        android:text="@string/inner_room"
+        android:text="@string/no_name"
         android:textColor="@color/colorWhite"
         android:textStyle="bold" />
 

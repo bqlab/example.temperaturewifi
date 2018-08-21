@@ -1,5 +1,6 @@
 package com.bqlab.temperaturewifi;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -21,23 +22,24 @@ import java.net.UnknownHostException;
 
 public class MainActivity extends AppCompatActivity {
 
-    Room livingRoom;
-    Room innerRoom;
+    Room room1;
+    Room room2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        livingRoom = new Room((Button) findViewById(R.id.living_room));
-        innerRoom = new Room((Button) findViewById(R.id.inner_room));
+        room1 = new Room((Button) findViewById(R.id.room1));
+        room2 = new Room((Button) findViewById(R.id.room2));
 
-        Toast.makeText(this, "버튼을 클릭하여 IP를 등록하세요.", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "버튼을 클릭하여 이름과 IP를 등록하세요.", Toast.LENGTH_LONG).show();
     }
 
     private class Room {
         private Button view;
         private String ip;
+        private String name;
         private Socket socket;
         private Thread thread;
         private BufferedReader reader;
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    setIP();
+                    setRoom();
                 }
             });
         }
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     if (checkSetIP(e.getText().toString())) {
                         Toast.makeText(MainActivity.this, e.getText().toString() + "에 연결합니다.", Toast.LENGTH_SHORT).show();
                         new Thread(new ThreadConnector(e.getText().toString(), 8090)).start();
+                        setColor(36);
                         Room.this.ip = e.getText().toString();
                         dialogInterface.dismiss();
                     } else {
@@ -88,13 +91,48 @@ public class MainActivity extends AppCompatActivity {
             b.show();
         }
 
+        private void setRoom() {
+            final EditText e = new EditText(MainActivity.this);
+            AlertDialog.Builder b = new AlertDialog.Builder(MainActivity.this);
+            b.setMessage("이름을 입력하세요.");
+            b.setView(e);
+            b.setPositiveButton("다음", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Room.this.name = e.getText().toString();
+                    Room.this.view.setText(Room.this.name);
+                    dialogInterface.dismiss();
+                }
+            });
+            b.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            b.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    setIP();
+                }
+            });
+            b.show();
+        }
+
+        @SuppressLint("SetTextI18n")
         public void setColor(int temp) {
-            if (temp <= 35)
+            if (temp <= 35) {
                 view.setBackground(getResources().getDrawable(R.color.colorGreen));
-            else if (temp <= 80)
+                view.setText(view.getText().toString()+"\n정상("+temp+"℃)");
+            }
+            else if (temp <= 80) {
                 view.setBackground(getResources().getDrawable(R.color.colorYellow));
+                view.setText(view.getText().toString()+"\n과열("+temp+"℃)");
+            }
+
             else if (temp <= 105) {
                 view.setBackground(getResources().getDrawable(R.color.colorRed));
+                view.setText(view.getText().toString()+"\n화재("+temp+"℃)");
                 AlertDialog.Builder b = new AlertDialog.Builder(MainActivity.this);
                 b.setMessage("화재가 발생했습니다. 119에 전화를 겁니다.");
                 b.setPositiveButton("확인", new DialogInterface.OnClickListener() {
