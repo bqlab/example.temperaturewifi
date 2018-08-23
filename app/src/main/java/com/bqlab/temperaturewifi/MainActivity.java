@@ -37,12 +37,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class Room {
-        private Button view;
         private String ip;
         private String name;
-        private Socket socket;
-        private Thread thread;
-        private BufferedReader reader;
+        private Button view;
+
+        Socket socket;
+        Thread thread;
+        BufferedReader reader;
 
         boolean isConnected = false;
 
@@ -73,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
                     if (checkSetIP(e.getText().toString())) {
                         Toast.makeText(MainActivity.this, e.getText().toString() + "에 연결합니다.", Toast.LENGTH_SHORT).show();
                         new Thread(new ThreadConnector(e.getText().toString(), 8090)).start();
-                        setColor(36);
                         Room.this.ip = e.getText().toString();
                         dialogInterface.dismiss();
                     } else {
@@ -123,16 +123,13 @@ public class MainActivity extends AppCompatActivity {
         public void setColor(int temp) {
             if (temp <= 35) {
                 view.setBackground(getResources().getDrawable(R.color.colorGreen));
-                view.setText(view.getText().toString()+"\n정상("+temp+"℃)");
-            }
-            else if (temp <= 80) {
+                view.setText(view.getText().toString() + "\n정상(" + temp + "℃)");
+            } else if (temp <= 80) {
                 view.setBackground(getResources().getDrawable(R.color.colorYellow));
-                view.setText(view.getText().toString()+"\n과열("+temp+"℃)");
-            }
-
-            else if (temp <= 105) {
+                view.setText(view.getText().toString() + "\n과열(" + temp + "℃)");
+            } else if (temp <= 105) {
                 view.setBackground(getResources().getDrawable(R.color.colorRed));
-                view.setText(view.getText().toString()+"\n화재("+temp+"℃)");
+                view.setText(view.getText().toString() + "\n화재(" + temp + "℃)");
                 AlertDialog.Builder b = new AlertDialog.Builder(MainActivity.this);
                 b.setMessage("화재가 발생했습니다. 119에 전화를 겁니다.");
                 b.setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -206,8 +203,6 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
                         }
-                        reader = null;
-                        socket.close();
                     }
                 } catch (IOException e) {
                     Toast.makeText(MainActivity.this, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
