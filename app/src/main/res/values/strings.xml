@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">app</string>
     <string name="no_name">no_name</string>
+    <string name="normal">%s\n정상(%d℃)</string>
+    <string name="overheat">%s\n과열(%d℃)</string>
+    <string name="fire">%s\n화재(%d℃)</string>
 </resources>
