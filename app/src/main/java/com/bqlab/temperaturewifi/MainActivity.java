@@ -137,11 +137,11 @@ public class MainActivity extends AppCompatActivity {
                     socket = new Socket(ip, port);
                     ThreadConnector.this.ip = socket.getRemoteSocketAddress().toString();
                 } catch (UnknownHostException e) {
-                    Log.d(TAG, "ConnectThread: can't find host");
+                    Log.d(TAG, "호스트를 찾을 수 없습니다.");
                 } catch (SocketTimeoutException e) {
-                    Log.d(TAG, "ConnectThread: timeout");
+                    Log.d(TAG, "연결 시간이 초과되었습니다.");
                 } catch (Exception e) {
-                    Log.e(TAG, ("ConnectThread:" + e.getMessage()));
+                    Log.e(TAG, ("에러가 발생했습니다."));
                 }
                 if (socket != null) {
                     try {
@@ -167,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private class ThreadReceiver implements Runnable {
-
             @Override
             public void run() {
                 try {
@@ -178,13 +177,13 @@ public class MainActivity extends AppCompatActivity {
                             public void run() {
                                 if (temp <= 35) {
                                     view.setBackground(getResources().getDrawable(R.color.colorGreen));
-                                    view.setText(getString(R.string.normal, Room.this.name, temp));
+                                    view.setText(getString(R.string.normal, Room.this.name, Room.this.temp));
                                 } else if (temp <= 80) {
                                     view.setBackground(getResources().getDrawable(R.color.colorYellow));
-                                    view.setText(getString(R.string.overheat, Room.this.name, temp));
+                                    view.setText(getString(R.string.overheat, Room.this.name, Room.this.temp));
                                 } else if (temp <= 105) {
                                     view.setBackground(getResources().getDrawable(R.color.colorRed));
-                                    view.setText(getString(R.string.fire, Room.this.name, temp));
+                                    view.setText(getString(R.string.fire, Room.this.name, Room.this.temp));
                                     AlertDialog.Builder b = new AlertDialog.Builder(MainActivity.this);
                                     b.setMessage("화재가 발생했습니다. 119에 전화를 겁니다.");
                                     b.setPositiveButton("확인", new DialogInterface.OnClickListener() {
