@@ -38,9 +38,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class Room {
-        private Button view;
         private String ip;
         private String name;
+        private Button view;
         private Socket socket;
         private Thread thread;
         private BufferedReader reader;
