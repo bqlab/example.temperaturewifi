@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class Room {
+        private String ip;
         private String name;
         private Button view;
         private Socket socket;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         int temp = 0;
         boolean isConnected = false;
-
+        
         Room(Button view) {
             this.view = view;
             view.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if (checkSetIP(e.getText().toString())) {
                         Toast.makeText(MainActivity.this, e.getText().toString() + "에 연결합니다.", Toast.LENGTH_SHORT).show();
-                        new Thread(new ThreadConnector(e.getText().toString(), 8090)).start();
+                        Room.this.ip = e.getText().toString();
                         dialogInterface.dismiss();
                     } else {
                         Toast.makeText(MainActivity.this, "입력을 다시 확인하세요.", Toast.LENGTH_SHORT).show();
