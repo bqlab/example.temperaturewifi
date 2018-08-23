@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         int temp = 0;
         boolean isConnected = false;
-        
+
         Room(Button view) {
             this.view = view;
             view.setOnClickListener(new View.OnClickListener() {
