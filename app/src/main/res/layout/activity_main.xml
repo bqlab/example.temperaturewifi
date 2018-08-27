@@ -9,24 +9,31 @@
     android:orientation="horizontal"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/room1"
-        android:layout_width="100dp"
-        android:layout_height="200dp"
-        android:layout_marginEnd="10dp"
-        android:background="@color/colorGray"
-        android:text="@string/no_name"
-        android:textColor="@color/colorWhite"
-        android:textStyle="bold" />
+    <LinearLayout
+        android:layout_width="320dp"
+        android:layout_height="500dp"
+        android:background="@drawable/border">
+        <Button
+            android:id="@+id/room1"
+            android:layout_width="100dp"
+            android:layout_height="200dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/colorGray"
+            android:text="@string/no_name"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/room2"
-        android:layout_width="100dp"
-        android:layout_height="200dp"
-        android:layout_marginEnd="10dp"
-        android:background="@color/colorGray"
-        android:text="@string/no_name"
-        android:textColor="@color/colorWhite"
-        android:textStyle="bold" />
+        <Button
+            android:id="@+id/room2"
+            android:layout_width="100dp"
+            android:layout_height="200dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/colorGray"
+            android:text="@string/no_name"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
 
 </LinearLayout>
