@@ -4,4 +4,6 @@
     <string name="normal">%s\n정상(%d℃)</string>
     <string name="overheat">%s\n과열(%d℃)</string>
     <string name="fire">%s\n화재(%d℃)</string>
+    <string name="main_title">IoT 스마트 화재 경보 소화기</string>
+    <string name="main_119">119 화재신고</string>
 </resources>

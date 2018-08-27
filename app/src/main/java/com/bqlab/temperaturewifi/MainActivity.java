@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -21,28 +22,78 @@ import java.net.UnknownHostException;
 
 public class MainActivity extends AppCompatActivity {
 
-    Room room1;
-    Room room2;
+    Room mainRoom1;
+    Room mainRoom2;
 
     String TAG = "tcp";
+    String callNumber = "119";
+
+    LinearLayout mainCallButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        room1 = new Room((Button) findViewById(R.id.room1));
-        room2 = new Room((Button) findViewById(R.id.room2));
+        mainRoom1 = new Room((Button) findViewById(R.id.main_room1));
+        mainRoom2 = new Room((Button) findViewById(R.id.main_room2));
 
+        mainCallButton = (LinearLayout) findViewById(R.id.main_119);
+        mainCallButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder b = new AlertDialog.Builder(MainActivity.this);
+                b.setMessage("긴급한 상황입니까?");
+                b.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        MainActivity.this.startActivity(new Intent("android.intent.action.DIAL", Uri.parse("tel:" + callNumber)));
+                    }
+                });
+                b.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                b.setNeutralButton("긴급전화 수정하기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        final EditText e = new EditText(MainActivity.this);
+                        AlertDialog.Builder b = new AlertDialog.Builder(MainActivity.this);
+                        b.setMessage("전화번호를 입력하세요.(특수문자 제외)");
+                        b.setView(e);
+                        b.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (checkCallNumber(e.getText().toString())) {
+                                    callNumber = e.getText().toString();
+                                    Toast.makeText(MainActivity.this, callNumber+"(으)로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+                                }
+                                else
+                                    Toast.makeText(MainActivity.this, "잘못된 입력입니다.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        b.show();
+                    }
+                });
+                b.show();
+            }
+        });
         Toast.makeText(this, "버튼을 클릭하여 이름과 IP를 등록하세요.", Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        room1.isConnected = false;
-        room2.isConnected = false;
+        mainRoom1.isConnected = false;
+        mainRoom2.isConnected = false;
+    }
 
+    private boolean checkCallNumber(String callNumber) {
+        for (int i = 0; i < callNumber.length(); i++)
+            if (!"0123456789".contains(String.valueOf(callNumber.charAt(i)))) return false;
+        return !callNumber.isEmpty();
     }
 
     private class Room {
@@ -193,14 +244,6 @@ public class MainActivity extends AppCompatActivity {
                                     } else if (temp <= 105) {
                                         view.setBackground(getResources().getDrawable(R.color.colorRed));
                                         view.setText(getString(R.string.fire, Room.this.name, Room.this.temp));
-                                        AlertDialog.Builder b = new AlertDialog.Builder(MainActivity.this);
-                                        b.setMessage("화재가 발생했습니다. 119에 전화를 겁니다.");
-                                        b.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                MainActivity.this.startActivity(new Intent("android.intent.action.DIAL", Uri.parse("tel:119")));
-                                            }
-                                        });
                                     }
                                 }
                             });
